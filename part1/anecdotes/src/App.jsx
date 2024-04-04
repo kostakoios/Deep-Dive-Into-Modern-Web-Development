@@ -25,13 +25,19 @@ const App = () => {
     copy[selected] += 1
     setPoints(copy)
   }
-  console.log('points: ', points)
+
+  let pointsArray = Object.values(points)
+  let maxPoints = Math.max(...pointsArray)
+  let indexOfMaxPoints = pointsArray.indexOf(maxPoints)
+ 
   return (
     <div>
       <p>{anecdotes[selected]}</p>
       <p>has { points[selected] } votes</p>
       <button onClick={countVotes}>vote</button>
       <button onClick={nextAnecdote}>next anecdote</button>
+      <h2>Anecdotes with most votes</h2>
+      <p>{anecdotes[indexOfMaxPoints]}</p>
     </div>
   )
 }
