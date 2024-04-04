@@ -6,7 +6,8 @@ const Button = ({buttonClicked, text}) => {
   )
 }
 
-const Statistics = ({good, neutral, bad}) => {
+const Statistics = (props) => {
+  const {good, neutral, bad} = props
   let sum = good + neutral + bad
   let average =  sum == 0 ? 0 : (good + (bad * (-1))) / sum
   let positive = sum == 0 ? 0 : (good / sum) * 100
