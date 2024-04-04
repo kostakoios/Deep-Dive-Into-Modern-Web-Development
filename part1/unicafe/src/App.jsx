@@ -17,18 +17,29 @@ const Statistics = (props) => {
   let average =  (good + (bad * (-1))) / sum
   let positive = (good / sum) * 100
   return (
-    <>
+    <table>
       <StatisticLine text="good" value ={good} />
       <StatisticLine text="neutral" value ={neutral} />
       <StatisticLine text="bad" value ={bad} />
       <StatisticLine text="sum" value ={sum} />
       <StatisticLine text="average" value ={average} />
       <StatisticLine text="positive" value ={positive} />
-    </>
+    </table>
   )
 }
 
-const StatisticLine = ({text, value}) => text == "positive" ? <p>{text} {value} %</p> : <p>{text} {value}</p>
+const StatisticLine = ({text, value}) =>{
+  return (
+      text == "positive" ? <tr>
+        <td>{text}</td>
+        <td>{value} %</td>
+        </tr> : 
+        <tr>
+          <td>{text}</td> 
+          <td>{value}</td>
+        </tr>
+  )
+} 
 
 const App = () => {
   // save clicks of each button to its own state
