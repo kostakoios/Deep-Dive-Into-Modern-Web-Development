@@ -17,7 +17,7 @@ const App = () => {
       console.log(response)
       setPersons(response)
       setShowFilterArray(response)
-    })
+    }).catch(error => console.log(error));
   }, [])
 
   const handleNameChange = (event) => {
@@ -45,17 +45,39 @@ const App = () => {
       const addNewName = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1
       }
 
       phoneBookService.create(addNewName)
       .then(response => {
         setPersons(persons.concat(response))
         setShowFilterArray(persons.concat(response))
-      })
+      }).catch(error => console.log(error));
     }
     setNewName("")
     setNewNumber("")
+  }
+
+  const deletePerson = (id) => {
+    let findPerson = persons.filter(person => person.id === id)
+    if(window.confirm(`Delete ${findPerson[0].name}?`)){
+      phoneBookService.deletePerson(id)
+      .then(response => {
+        let newArray = persons.filter(person => {
+          if(person.id !== response.id){
+            return person
+          }
+        })
+        setPersons(newArray)
+        let newFilterArray = newArray.filter(person => person.name.includes(newFilter))
+        setShowFilterArray(newFilterArray)
+      })  
+      .catch(err => console.log(err))
+      
+    } else {
+      console.log("no")
+    }
+   
+    
   }
 
   return (
@@ -68,7 +90,7 @@ const App = () => {
           handleNameChange={handleNameChange} newNumber={newNumber} handleNumber={handleNumber} />
       
       <h2>Numbers</h2>
-      <Persons showFilterArray={showFilterArray} />
+      <Persons showFilterArray={showFilterArray} deletePerson={deletePerson}/>
     </div>
   )
 }
