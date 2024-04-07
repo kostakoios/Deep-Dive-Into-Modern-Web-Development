@@ -9,7 +9,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
-  const [showFilterArray, setShowFilterArray] = useState(persons)
+  const [showFilterArray, setShowFilterArray] = useState([])
 
   useEffect(() => {
     axios.get('http://localhost:3001/persons')
@@ -30,9 +30,7 @@ const App = () => {
   const handleFilterChange = (event) => {
     let filterValue = event.target.value;
     setNewFilter(filterValue)
-    let newArray = persons.filter(person => {
-      return person.name.includes(filterValue)
-    })
+    let newArray = persons.filter(person => person.name.includes(filterValue))
     setShowFilterArray(newArray)
   }
 
@@ -48,8 +46,12 @@ const App = () => {
         number: newNumber,
         id: persons.length + 1
       }
-      setPersons(persons.concat(addNewName))
-      setShowFilterArray(persons.concat(addNewName))
+
+      axios.post('http://localhost:3001/persons', addNewName)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setShowFilterArray(persons.concat(response.data))
+      })
     }
     setNewName("")
     setNewNumber("")
