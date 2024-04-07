@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import phoneBookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -12,10 +12,11 @@ const App = () => {
   const [showFilterArray, setShowFilterArray] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
+    phoneBookService.getAll()
     .then(response => {
-      setPersons(response.data)
-      setShowFilterArray(response.data)
+      console.log(response)
+      setPersons(response)
+      setShowFilterArray(response)
     })
   }, [])
 
@@ -47,10 +48,10 @@ const App = () => {
         id: persons.length + 1
       }
 
-      axios.post('http://localhost:3001/persons', addNewName)
+      phoneBookService.create(addNewName)
       .then(response => {
-        setPersons(persons.concat(response.data))
-        setShowFilterArray(persons.concat(response.data))
+        setPersons(persons.concat(response))
+        setShowFilterArray(persons.concat(response))
       })
     }
     setNewName("")
