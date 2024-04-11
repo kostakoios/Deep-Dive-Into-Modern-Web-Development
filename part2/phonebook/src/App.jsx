@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import phoneBookService from './services/phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -10,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [showFilterArray, setShowFilterArray] = useState([])
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     phoneBookService.getAll()
@@ -38,15 +40,18 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
     // check if newName is already exist in persons array
-    const isName = persons.find(person => person.name == newName)
+    const isName = persons.find(person => person.name == newName.trim())
     if (isName) {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)){
         console.log('newNumber: ', newNumber)
         let changeNumberOfPerson = {...isName, number: newNumber}
-        console.log("changeNumberOfPerson", changeNumberOfPerson)
+        console.log("isName", isName)
         phoneBookService
         .updateNumber(isName.id, changeNumberOfPerson)
-        .then(returnedPerson => setPersons(persons.map(person => person.id !== id ? person : returnedPerson)))
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== isName.id ? person : returnedPerson))
+          setMessage(`${returnedPerson.name} number is updated`) 
+        })
         .catch(err => {
           console.log(err)
           throw new Error(err)
@@ -64,8 +69,12 @@ const App = () => {
       .then(response => {
         setPersons(persons.concat(response))
         setShowFilterArray(persons.concat(response))
+        setMessage(`Added ${response.name}`)
       }).catch(error => console.log(error));
     }
+    setTimeout(() => {
+      setMessage(null)
+    }, 1000);
     setNewName("")
     setNewNumber("")
   }
@@ -96,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>
 
       <h2>Add a new</h2>

@@ -13,6 +13,7 @@ const create = (createObject) => {
 }
 
 const updateNumber = (id, newObject) => {
+    console.log('updatenumber service id:', id)
     const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request.then(response => response.data)
 }
