@@ -5,8 +5,8 @@ const Persons = ({showFilterArray, deletePerson}) => {
             <div key={person.id}>
                 <p>
                 {person.name} {person.number}
-                </p>
                 <button onClick={() => deletePerson(person.id)}>delete</button>
+                </p>
             </div>        
             ))}
         </div>
