@@ -12,6 +12,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
   const [showFilterArray, setShowFilterArray] = useState([])
   const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
   useEffect(() => {
     phoneBookService.getAll()
@@ -51,6 +52,7 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== isName.id ? person : returnedPerson))
           setMessage(`${returnedPerson.name} number is updated`) 
+          setMessageType("success")
         })
         .catch(err => {
           console.log(err)
@@ -70,11 +72,12 @@ const App = () => {
         setPersons(persons.concat(response))
         setShowFilterArray(persons.concat(response))
         setMessage(`Added ${response.name}`)
+        setMessageType("success")
       }).catch(error => console.log(error));
     }
     setTimeout(() => {
       setMessage(null)
-    }, 1000);
+    }, 5000);
     setNewName("")
     setNewNumber("")
   }
@@ -92,20 +95,28 @@ const App = () => {
         setPersons(newArray)
         let newFilterArray = newArray.filter(person => person.name.includes(newFilter))
         setShowFilterArray(newFilterArray)
+        setMessage(`Deleted ${findPerson[0].name} from server`)
+        setMessageType("success")
       })  
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        setMessage(`Information of ${findPerson[0].name} has already been removed from server`)
+        setMessageType("failure")
+      })
       
     } else {
       console.log("no")
     }
-   
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000);
     
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification message={message} messageType={messageType}/>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>
 
       <h2>Add a new</h2>
