@@ -30,6 +30,27 @@ app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
 
+const generateId = () => {
+  return  Math.floor(Math.random() * 1000);
+}
+
+app.post("/api/persons", (request, response) => {
+  let newId = generateId();
+  let body = request.body;
+  if(!body.name || !body.number){
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+  let newPerson = {
+    id: newId,
+    name: body.name,
+    number: body.number
+  }
+  persons.concat(newPerson);
+  response.json(newPerson);
+});
+
 app.get("/info", (request, response) => {
   const sumOfPersons = persons.length;
   const date = new Date().toString();
