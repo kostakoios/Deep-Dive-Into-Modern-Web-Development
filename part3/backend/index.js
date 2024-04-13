@@ -42,6 +42,10 @@ app.post("/api/persons", (request, response) => {
       error: 'content missing' 
     })
   }
+  let checkNameIsUnique = persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())
+  if (checkNameIsUnique) {
+    return response.status(404).json({error: 'name must be unique'})
+  }
   let newPerson = {
     id: newId,
     name: body.name,
