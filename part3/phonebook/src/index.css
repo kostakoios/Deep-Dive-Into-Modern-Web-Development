@@ -1,0 +1,13 @@
+.success {
+    border: 3px solid greenyellow;
+    font-size: large;
+    color: green;
+    background-color: bisque;
+}
+
+.failure {
+    border: 3px solid rgba(255, 0, 0, 0.393);
+    font-size: large;
+    color: red;
+    background-color: bisque;
+}

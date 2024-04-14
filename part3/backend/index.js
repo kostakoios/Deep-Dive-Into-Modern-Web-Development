@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
 app.use(express.json());
-
+app.use(cors());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 morgan.token('body', req => {
@@ -48,7 +49,9 @@ app.use(requestLogger)
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-  
+app.get("/", (request, response) => {
+  response.send("<h1>Ruska is my queen</h1>");
+});  
 app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
