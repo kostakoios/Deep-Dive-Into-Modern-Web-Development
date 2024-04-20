@@ -92,6 +92,7 @@ app.put("/api/persons/:id", async (request, response, next) => {
   Persons
   .findOneAndUpdate(filter, update, {new: true})
   .then(person => {
+    console.log('updatedPerson: ', person);
     return response.json(person);
   })
   .catch(error => next(error));
