@@ -52,7 +52,6 @@ app.post("/api/persons", (request, response) => {
   Persons.find({})
   .then(persons => {
     let checkNameIsUnique = persons.find(person => person.name.toLowerCase() === body.name.toLowerCase());
-    console.log('findPerson: ', checkNameIsUnique);
     if (checkNameIsUnique) {
       return response.status(404).json({error: 'name must be unique'})
     }
