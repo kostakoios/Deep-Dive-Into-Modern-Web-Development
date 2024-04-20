@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Ada Lovelace", 
+    "number": "39-44-5323523"
+}
+
+###
+DELETE http://localhost:3001/api/persons/6623a41f29c4fa41e93ced24
+
