@@ -50,7 +50,9 @@ const App = () => {
         phoneBookService
         .updateNumber(isName.id, changeNumberOfPerson)
         .then(returnedPerson => {
+          console.log('returnedPerson', returnedPerson);
           setPersons(persons.map(person => person.id !== isName.id ? person : returnedPerson))
+          setShowFilterArray(persons.map(person => person.id !== isName.id ? person : returnedPerson))
           setMessage(`${returnedPerson.name} number is updated`) 
           setMessageType("success")
         })
@@ -88,7 +90,7 @@ const App = () => {
       phoneBookService.deletePerson(id)
       .then(response => {
         let newArray = persons.filter(person => {
-          if(person.id !== response.id){
+          if(person.id !== id){
             return person
           }
         })

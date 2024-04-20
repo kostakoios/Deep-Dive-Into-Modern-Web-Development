@@ -80,11 +80,32 @@ app.get("/api/persons/:id", (request, response) => {
   .catch(err => response.status(400).json({error: err.message}));
 });
 
+app.put("/api/persons/:id", async (request, response) => {
+  let body = request.body;
+  if(!body.name || !body.number){
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+  const filter = { _id: request.params.id};
+  const update = { $set: {number: body.number}}
+
+  Persons
+  .findOneAndUpdate(filter, update, {new: true})
+  .then(person => {
+    return response.json(person);
+  })
+  .catch(err => response.status(400).json({error: err.message}));
+
+});
+
 app.delete("/api/persons/:id", async (request, response) => {
   await Persons.findByIdAndDelete(request.params.id).then(person => {
      response.json(person);
   }).catch(err => response.status(400).json({error: err.message}));
 })
+
+
 app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001;
