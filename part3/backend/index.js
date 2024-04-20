@@ -74,7 +74,11 @@ app.get("/info", (request, response) => {
 
 app.get("/api/persons/:id", (request, response, next) => {
   Persons.findById(request.params.id).then(person => {
-    response.json(person);
+    if(person){
+      return response.json(person);
+    } else {
+      return response.status(404).end();
+    }
   })
   .catch(error => next(error));
 });
