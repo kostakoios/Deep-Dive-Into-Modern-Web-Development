@@ -59,12 +59,9 @@ app.post("/api/persons", async (request, response, next) => {
   });
 
   let validateError = newPerson.validateSync();
-  
   if(validateError) {
-    console.log(validateError.message)
     return response.status(400).json({error: validateError.message});
   }
-
   Persons.find({})
     .then((persons) => {
       let checkNameIsUnique = persons.find(
@@ -73,7 +70,6 @@ app.post("/api/persons", async (request, response, next) => {
       if (checkNameIsUnique) {
         return response.status(404).json({ error: "name must be unique" });
       }
-      
       newPerson
         .save()
         .then((savedPerson) => response.json(savedPerson))
