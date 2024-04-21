@@ -44,7 +44,7 @@ const generateId = () => {
   return Math.floor(Math.random() * 1000);
 };
 
-app.post("/api/persons", (request, response, next) => {
+app.post("/api/persons", async (request, response, next) => {
   let newId = generateId();
   let body = request.body;
   if (!body.name || !body.number) {
@@ -52,11 +52,7 @@ app.post("/api/persons", (request, response, next) => {
       error: "content missing",
     });
   }
-  // if (body.name.length < 4) {
-  //   return response
-  //     .status(400)
-  //     .json({ error: "name must be at least 4 characters" });
-  // }
+
   let newPerson = new Persons({
     name: body.name,
     number: body.number,
@@ -65,8 +61,10 @@ app.post("/api/persons", (request, response, next) => {
   let validateError = newPerson.validateSync();
   
   if(validateError) {
-    return response.status(400).json({error: validateError.errors.name.message});
+    console.log(validateError.message)
+    return response.status(400).json({error: validateError.message});
   }
+
   Persons.find({})
     .then((persons) => {
       let checkNameIsUnique = persons.find(
