@@ -57,7 +57,6 @@ const App = () => {
           setMessageType("success")
         })
         .catch(err => {
-          console.log(err)
           throw new Error(err)
         })
       } else {
@@ -75,7 +74,10 @@ const App = () => {
         setShowFilterArray(persons.concat(response))
         setMessage(`Added ${response.name}`)
         setMessageType("success")
-      }).catch(error => console.log(error));
+      }).catch(error => {
+        setMessage(error.response.data.error)
+        setMessageType("failure")
+      });
     }
     setTimeout(() => {
       setMessage(null)
