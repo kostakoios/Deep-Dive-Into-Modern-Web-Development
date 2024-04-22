@@ -7,10 +7,11 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../phonebook && npm run build && @powershell Copy-Item dist -Recurse ../backend",    
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../phonebook && npm run build && @powershell Copy-Item dist -Recurse ../backend",
     "deploy": "flyctl deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",    
-    "logs:prod": "fly logs"
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,8 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.4",
+    "@stylistic/eslint-plugin-js": "^1.7.2",
+    "eslint": "^9.1.0",
     "nodemon": "^3.1.0"
   }
 }
