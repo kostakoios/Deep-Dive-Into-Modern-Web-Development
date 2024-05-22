@@ -36,9 +36,19 @@ const mostBlogs = (array) => {
   return {author: finalResult[0], blogs: finalResult[1]};
 } 
 
+const mostLikes = (array) => {
+  if (array.length === 0) {
+    return 0;
+  }
+  const reducer = (prev, current) => (prev && prev.likes > current.likes) ? prev : current;
+  let obj = array.reduce(reducer);   
+  return {author: obj.author, likes: obj.likes};
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };
