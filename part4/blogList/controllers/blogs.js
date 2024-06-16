@@ -26,10 +26,6 @@ blogListRouter.post("/", async (request, response, next) => {
       response.status(400).end({ error: err.message })
     }
   
-    // blog
-    //   .save()
-    //   .then((result) => response.status(201).json(result))
-    //   .catch((err) => response.status(400).end({ error: err.message }));
   } catch (error) {
     next(error)
   }
