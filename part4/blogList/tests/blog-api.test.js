@@ -63,6 +63,30 @@ test.only('successfully creates a new blog post', async () => {
     assert.equal(getCurrentlyAddedBlog.likes, newBlog.likes)
   })
 
+
+test.only('if the likes property is missing from the request, it will default to the value 0', async () => {
+    const newBlog = {
+        "title": "My wifes new Blog",
+        "author": "Rusudan",
+        "url": "http://localhost:3003/api/blogs",
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogAtEnd.length, helper.initialBloges.length + 1)
+    const getCurrentlyAddedBlog = blogAtEnd.find(n => {
+       if(n.title.includes('My wifes new Blog')) {
+            return n;
+       } 
+    })
+    assert.equal(getCurrentlyAddedBlog.likes, 0)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
