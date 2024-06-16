@@ -12,7 +12,6 @@ blogListRouter.get("/", async (request, response, next) => {
 
 blogListRouter.post("/", async (request, response, next) => {
   try {
-
     const blog = new Blog(request.body)
     const result = await blog.save()
     if (result) {
