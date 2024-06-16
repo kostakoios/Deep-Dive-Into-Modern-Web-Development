@@ -1,22 +1,32 @@
 const blogListRouter = require("express").Router();
 const Blog = require("../models/blogList");
 
-blogListRouter.get("/", (request, response, next) => {
-  Blog.find({})
-    .then((blogs) => response.json(blogs))
-    .catch((error) => next(error));
+blogListRouter.get("/", async (request, response, next) => {
+  try {
+    const blogs = await Blog.find({})
+    response.json(blogs)
+  } catch(error) {
+    next(error)
+  }
 });
 
-blogListRouter.post("/", (request, response, next) => {
+blogListRouter.post("/", async (request, response, next) => {
   try {
-    const blog = new Blog(request.body);
 
-    blog
-      .save()
-      .then((result) => response.status(201).json(result))
-      .catch((err) => response.status(400).end({ error: err.message }));
+    const blog = new Blog(request.body)
+    const result = await blog.save()
+    if (result) {
+      response.status(201).json(result)
+    } else {
+      response.status(400).end({ error: err.message })
+    }
+  
+    // blog
+    //   .save()
+    //   .then((result) => response.status(201).json(result))
+    //   .catch((err) => response.status(400).end({ error: err.message }));
   } catch (error) {
-    next(error);
+    next(error)
   }
 });
 
