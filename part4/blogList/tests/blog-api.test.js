@@ -36,7 +36,7 @@ test('unique identifier property of the blog posts is named id', async () => {
     })
 })
 
-test.only('successfully creates a new blog post', async () => {
+test('successfully creates a new blog post', async () => {
     const newBlog = {
         "title": "My wifes new Blog",
         "author": "Rusudan",
@@ -64,7 +64,7 @@ test.only('successfully creates a new blog post', async () => {
   })
 
 
-test.only('if the likes property is missing from the request, it will default to the value 0', async () => {
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
     const newBlog = {
         "title": "My wifes new Blog",
         "author": "Rusudan",
@@ -86,6 +86,18 @@ test.only('if the likes property is missing from the request, it will default to
     })
     assert.equal(getCurrentlyAddedBlog.likes, 0)
 })
+
+test.only('title or url properties are missing from the request data', async () => {
+    const newBlog = {
+        "author": "Rusudan",
+        "likes": 112
+    }
+  
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+})
+
 
 after(async () => {
     await mongoose.connection.close()

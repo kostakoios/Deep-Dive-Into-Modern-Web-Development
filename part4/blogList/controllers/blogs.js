@@ -15,6 +15,9 @@ blogListRouter.post("/", async (request, response, next) => {
     if (!request.body.likes) {
       request.body.likes = 0
     }
+    if (!request.body.title || !request.body.url) {
+      return response.status(400).end()
+    }
     const blog = new Blog(request.body)
     const result = await blog.save()
     if (result) {
