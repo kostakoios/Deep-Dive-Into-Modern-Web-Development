@@ -10,12 +10,10 @@ const Blog = require('../models/blogList')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-  
-    let blogObject = new Blog(helper.initialBloges[0])
-    await blogObject.save()
-  
-    blogObject = new Blog(helper.initialBloges[1])
-    await blogObject.save()
+    console.log('cleared')
+  const blogObjects = helper.initialBloges.map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
   })
 
 test('blogs are returned as json', async () => {
@@ -98,9 +96,35 @@ test('title or url properties are missing from the request data', async () => {
       .expect(400)
 })
 
-test.only('deleting a single blog post resource', async () => {
-    const blogId = '666eba922cd5207914356305'
-    await api.delete(`/api/blogs/${blogId}`).expect(204)
+test('deleting a single blog post resource', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    
+    await api.delete(`api/blogs/${blogToDelete.id}`).expect(204)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+    const titles = blogsAtEnd.map(r => r.title)
+    assert(!titles.includes(blogToDelete.title))
+
+    assert.strictEqual(blogsAtEnd.length, helper.initialBloges.length - 1)
+})
+
+test.only('updating a single blog by id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    blogToUpdate.author = "Joja jojishvili"
+    
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+    
+   const blogsAtEnd = await helper.blogsInDb()
+   const getBlog = blogsAtEnd.map(r => {
+    if(r.id == blogToUpdate.id) {
+        return r
+    }
+   })
+   assert.deepStrictEqual(getBlog[0], blogToUpdate)
 })
 
 after(async () => {
