@@ -31,4 +31,13 @@ blogListRouter.post("/", async (request, response, next) => {
   }
 });
 
+blogListRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Blog.findByIdAndUpdate(request.params.id)
+    response.status(204).end()
+  } catch(error) {
+    next(error)
+  }
+});
+
 module.exports = blogListRouter;

@@ -87,7 +87,7 @@ test('if the likes property is missing from the request, it will default to the 
     assert.equal(getCurrentlyAddedBlog.likes, 0)
 })
 
-test.only('title or url properties are missing from the request data', async () => {
+test('title or url properties are missing from the request data', async () => {
     const newBlog = {
         "author": "Rusudan",
         "likes": 112
@@ -98,6 +98,10 @@ test.only('title or url properties are missing from the request data', async () 
       .expect(400)
 })
 
+test.only('deleting a single blog post resource', async () => {
+    const blogId = '666eba922cd5207914356305'
+    await api.delete(`/api/blogs/${blogId}`).expect(204)
+})
 
 after(async () => {
     await mongoose.connection.close()
