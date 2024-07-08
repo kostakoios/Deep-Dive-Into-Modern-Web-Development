@@ -1,13 +1,13 @@
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtaWxpYW5hIiwiaWQiOiI2NjhiN2QxMGI3NjFmYjNlM2FmZmFmYTgiLCJpYXQiOjE3MjA0MTgzOTZ9.sNa4eRuVG3jdEIrkQfs2khgPGjkrr5DtHvtUFLCY5c8
 
 {
     "title": "Hello World!!",
-    "author": "Superuser",
+    "author": "Emiliana",
     "url": "http://localhost:3003/api/blogs",
-    "likes": 1322,
-    "userId": "667045653f6b6732644a635d"
+    "likes": 192
 }
 
 ###
