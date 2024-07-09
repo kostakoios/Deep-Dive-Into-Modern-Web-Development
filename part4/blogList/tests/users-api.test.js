@@ -14,8 +14,8 @@ describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
+    const passwordHash = await bcrypt.hash('salainen', 10)
+    const user = new User({ username: 'emiliana', passwordHash })
 
     await user.save()
   })
@@ -24,8 +24,8 @@ describe('when there is initially one user in db', () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
-      username: 'emy',
-      name: 'Matti Luukkainen',
+      username: 'jamson',
+      name: 'emily',
       password: 'salainen',
     }
 
@@ -46,7 +46,7 @@ describe('when there is initially one user in db', () => {
       const usersAtStart = await helper.usersInDb()
   
       const newUser = {
-        username: 'root',
+        username: 'emiliana',
         name: 'Superuser',
         password: 'salainen',
       }
@@ -62,4 +62,24 @@ describe('when there is initially one user in db', () => {
   
       assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
-})
+  
+  test('creation succeeds of login', async () => {  
+      const newUser = {
+        username: 'emiliana',
+        password: 'salainen',
+      }
+      await api
+        .post('/api/login')
+        .send(newUser)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+  
+      const usersAtEnd = await helper.usersInDb()  
+      const usernames = usersAtEnd.map(u => u.username)
+      assert(usernames.includes(newUser.username))
+    })
+
+  after(async () => {
+      await mongoose.connection.close()
+  })
+ })

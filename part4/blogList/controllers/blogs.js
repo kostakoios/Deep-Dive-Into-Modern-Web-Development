@@ -23,7 +23,6 @@ blogListRouter.post("/", middleware.userExtractor, async (request, response, nex
       return response.status(400).end()
     }
     const user = request.user
-
     const blog = new Blog({
       url: body.url,
       title: body.title,
@@ -34,6 +33,7 @@ blogListRouter.post("/", middleware.userExtractor, async (request, response, nex
 
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
+    console.log('users.blogs: ', user.blogs)
     await user.save()
 
     response.status(201).json(savedBlog)
@@ -49,7 +49,7 @@ blogListRouter.delete('/:id', middleware.userExtractor, async (request, response
     if (!blog) {
       return response.status(404).json({ error: 'blog not found' })
     }
-
+  
     if (blog.user.toString() !== userId.toString()) {
       return response.status(403).json({ error: 'forbidden: the blog does not belong to the user' })
     }
