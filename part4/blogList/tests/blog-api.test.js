@@ -24,16 +24,16 @@ describe('when there is initially one user in db', () => {
             .expect('Content-Type', /application\/json/)
     })
 
-    // test('unique identifier property of the blog posts is named id', async () => {
-    //     const response = await api
-    //         .get('/api/blogs')
-    //         .expect(200)
-    //         .expect('Content-Type', /application\/json/)
-    //     // Verify each blog post in the response has an `id` property
-    //     response.body.forEach(blog => {
-    //         assert.ok(blog.id)
-    //     })
-    // })
+    test('unique identifier property of the blog posts is named id', async () => {
+        const response = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        // Verify each blog post in the response has an `id` property
+        response.body.forEach(blog => {
+            expect(blog.id).toBeDefined();
+        })
+    })
 
     // test('successfully creates a new blog post', async () => {
     //     const newBlog = {
