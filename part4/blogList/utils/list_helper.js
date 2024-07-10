@@ -1,3 +1,6 @@
+// Load the full build.
+const _ = require('lodash');
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -36,6 +39,21 @@ const mostBlogs = (array) => {
   return {author: finalResult[0], blogs: finalResult[1]};
 } 
 
+const mostBlogsByLodash = (array) => {
+   // Flatten the blogs from each user
+   const blogs = _.flatMap(array, user => user.blogs);
+
+   // Count the number of blogs for each author
+   const authorCounts = _.countBy(blogs, 'author');
+ 
+   // Find the author with the maximum number of blogs
+   const topAuthor = _.maxBy(_.keys(authorCounts), author => authorCounts[author]);
+ 
+   return {
+     author: topAuthor,
+     blogs: authorCounts[topAuthor]
+   };
+}
 const mostLikes = (array) => {
   if (array.length === 0) {
     return 0;
@@ -50,5 +68,6 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
+  mostLikes,
+  mostBlogsByLodash
 };
