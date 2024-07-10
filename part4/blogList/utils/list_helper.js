@@ -7,7 +7,7 @@ const totalLikes = (array) => {
     return sum + item.likes;
   };
 
-  return array.length === 0 ? 0 : array.reduce(reducer, 0);
+  return array.length === 0 ? 0 : array.length === 1 ? array[0].likes : array.reduce(reducer, 0);
 };
 
 const favoriteBlog = (array) => {
