@@ -168,23 +168,23 @@ describe('when there is initially one user in db', () => {
         expect(titles).not.toContain(blogToDelete.title)
     }, 10000)
 
-    // test.only('updating a single blog by id', async () => {
-    //     const blogsAtStart = await helper.blogsInDb()
-    //     const blogToUpdate = blogsAtStart[0]
-    //     blogToUpdate.author = "Joja jojishvili"
+    test('updating a single blog by id', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+        blogToUpdate.author = "Joja jojishvili"
 
-    //     await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate)
-    //         .expect(200)
-    //         .expect('Content-Type', /application\/json/)
+        await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
-    //     const blogsAtEnd = await helper.blogsInDb()
-    //     const getBlog = blogsAtEnd.map(r => {
-    //         if (r.id == blogToUpdate.id) {
-    //             return r
-    //         }
-    //     })
-    //     assert.deepStrictEqual(getBlog[0], blogToUpdate)
-    // })
+        const blogsAtEnd = await helper.blogsInDb()
+        const getBlog = blogsAtEnd.map(r => {
+            if (r.id == blogToUpdate.id) {
+                return r
+            }
+        })
+        expect(getBlog[0]).toEqual(blogToUpdate)
+    })
 
     afterAll(async () => {
         await mongoose.connection.close()
