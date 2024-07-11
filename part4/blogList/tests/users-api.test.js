@@ -1,4 +1,4 @@
-const { test, after, beforeEach, describe } = require('node:test')
+// const { test, after, beforeEach, describe } = require('node:test')
 const assert = require("node:assert");
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -18,7 +18,7 @@ describe('when there is initially one user in db', () => {
     const user = new User({ username: 'emiliana', passwordHash })
 
     await user.save()
-  })
+  },10000)
 
   // test('creation succeeds with a fresh username', async () => {
   //   const usersAtStart = await helper.usersInDb()
@@ -79,7 +79,7 @@ describe('when there is initially one user in db', () => {
       assert(usernames.includes(newUser.username))
     })
 
-  after(async () => {
+  afterAll(async () => {
       await mongoose.connection.close()
   })
  })

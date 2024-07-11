@@ -45,11 +45,14 @@ blogListRouter.post("/", middleware.userExtractor, async (request, response, nex
 blogListRouter.delete('/:id', middleware.userExtractor, async (request, response, next) => {
   try {
     const userId = request.user.id
-    const blog = await Blog.findById(request.params.id)
+    const id = request.params.id.toString()
+
+    const blog = await Blog.findById(id)
+
     if (!blog) {
       return response.status(404).json({ error: 'blog not found' })
     }
-  
+    
     if (blog.user.toString() !== userId.toString()) {
       return response.status(403).json({ error: 'forbidden: the blog does not belong to the user' })
     }
