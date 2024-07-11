@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test-helper')
-const assert = require('assert')
+// const assert = require('assert')
 const api = supertest(app)
 
 const Blog = require('../models/blogList')
@@ -50,11 +50,11 @@ describe('when there is initially one user in db', () => {
             .post('/api/login')
             .send(userData)
             .expect(200)
-            .expect('Content-Type', /application\/json/)    
-            
-        const token = userResponse.body.token    
+            .expect('Content-Type', /application\/json/)
 
-       await api    
+        const token = userResponse.body.token
+
+        await api
             .post('/api/blogs')
             .set({ 'Authorization': `Bearer ${token}` })
             .send(newBlog)
@@ -62,7 +62,7 @@ describe('when there is initially one user in db', () => {
             .expect('Content-Type', /application\/json/)
 
         const response = await api.get('/api/blogs')
-        
+
         const titles = response.body.map(r => r.title)
 
         expect(response.body).toHaveLength(helper.initialBloges.length + 1)
@@ -72,29 +72,38 @@ describe('when there is initially one user in db', () => {
     })
 
 
-    // test('if the likes property is missing from the request, it will default to the value 0', async () => {
-    //     const newBlog = {
-    //         "title": "My wifes new Blog",
-    //         "author": "Rusudan",
-    //         "url": "http://localhost:3003/api/blogs",
-    //     }
+    test('if the likes property is missing from the request, it will default to the value 0', async () => {
+        const newBlog = {
+            "title": "Her new Blog",
+            "author": "Rusudan",
+            "url": "http://localhost:3003/api/blogs",
+        }
+        const userData = {
+            username: 'emiliana',
+            password: 'salainen',
+        }
+        const userResponse = await api
+            .post('/api/login')
+            .send(userData)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        const token = userResponse.body.token
+        await api
+            .post('/api/blogs')
+            .set({ 'Authorization': `Bearer ${token}` })
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
 
-    //     await api
-    //         .post('/api/blogs')
-    //         .set({ 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtaWxpYW5hIiwiaWQiOiI2NjhjZjZjYjRkZjQ2MDcwNmUwYzNlZjkiLCJpYXQiOjE3MjA1MTQyNTEsImV4cCI6MTcyMDUxNzg1MX0.to06F_GPS3ZmV8MYhvBh7ISTwvM4ZGL3AqLY7_2OYwA' })
-    //         .send(newBlog)
-    //         .expect(201)
-    //         .expect('Content-Type', /application\/json/)
-
-    //     const blogAtEnd = await helper.blogsInDb()
-    //     assert.strictEqual(blogAtEnd.length, helper.initialBloges.length + 1)
-    //     const getCurrentlyAddedBlog = blogAtEnd.find(n => {
-    //         if (n.title.includes('My wifes new Blog')) {
-    //             return n;
-    //         }
-    //     })
-    //     assert.equal(getCurrentlyAddedBlog.likes, 0)
-    // })
+        const response = await api.get('/api/blogs')
+        const getCurrentlyAddedBlog = response.body.find(n => {
+            if (n.title.includes('Her new Blog')) {
+                return n;
+            }
+        })
+        expect(response.body).toHaveLength(helper.initialBloges.length + 1)
+        expect(getCurrentlyAddedBlog.likes).toBe(0)
+    })
 
     // test('title or url properties are missing from the request data', async () => {
     //     const newBlog = {
