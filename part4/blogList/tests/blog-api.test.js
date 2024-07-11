@@ -105,17 +105,27 @@ describe('when there is initially one user in db', () => {
         expect(getCurrentlyAddedBlog.likes).toBe(0)
     })
 
-    // test('title or url properties are missing from the request data', async () => {
-    //     const newBlog = {
-    //         "author": "Rusudan",
-    //         "likes": 112
-    //     }
-
-    //     await api.post('/api/blogs')
-    //         .set({ 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtaWxpYW5hIiwiaWQiOiI2NjhjZjZjYjRkZjQ2MDcwNmUwYzNlZjkiLCJpYXQiOjE3MjA1MTQyNTEsImV4cCI6MTcyMDUxNzg1MX0.to06F_GPS3ZmV8MYhvBh7ISTwvM4ZGL3AqLY7_2OYwA' })
-    //         .send(newBlog)
-    //         .expect(400)
-    // })
+    test('title or url properties are missing from the request data', async () => {
+        const newBlog = {
+            "author": "Rusudan",
+            "likes": 112
+        }
+        const userData = {
+            username: 'emiliana',
+            password: 'salainen',
+        }
+        const userResponse = await api
+            .post('/api/login')
+            .send(userData)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        const token = userResponse.body.token
+       
+        await api.post('/api/blogs')
+            .set({ 'Authorization': `Bearer ${token}` })
+            .send(newBlog)
+            .expect(400)
+    })
 
     // test('deleting a single blog post resource', async () => {
     //     // const blogsAtStart = await helper.blogsInDb()
