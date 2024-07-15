@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,7 +12,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successfullMessage, setSuccessfullMessage] = useState(null)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -31,14 +34,22 @@ const App = () => {
     event.preventDefault()
     try {
       const getUser = await loginService.login({username, password,})
-      console.log('getUser: ', getUser)
+      console.log('getUser: ', getUser)      
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(getUser))
       setUser(getUser)
       blogService.setToken(getUser.token)
       setUsername('')
       setPassword('')
+      setSuccessfullMessage('User Logedin successfully!')
+      setTimeout(() => {
+        setSuccessfullMessage(null)
+      }, 5000)
     } catch(exception) {
-      console.log(exception)
+      console.log('now I am here inside: ', exception)
+      setErrorMessage('Wrong username or password')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -47,8 +58,16 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBlogUser')
       setUser(null)
+      setSuccessfullMessage('User Loged out successfully!')
+      setTimeout(() => {
+        setSuccessfullMessage(null)
+      }, 5000)
     } catch(exception) {
       console.log(exception)
+      setErrorMessage('Logout Problem')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -61,11 +80,19 @@ const App = () => {
       setAuthor('')
       setTitle('')
       setUrl('')
+      setSuccessfullMessage(`A new blog ${title} by ${author}`)
+      setTimeout(() => {
+        setSuccessfullMessage(null)
+      }, 5000)
     } catch(exception) {
       console.log(exception)
+      setErrorMessage('Creation blog error')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 15000)
     }
   }
-  console.log('user: ', user)
+  console.log('user: ', errorMessage)
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -126,6 +153,8 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        {errorMessage === null ? <div></div> : <Notification message={errorMessage} classname={'error'}/>}
+        {successfullMessage === null ? <div></div> : <Notification message={successfullMessage} classname={'success'} />}  
         {loginForm()}
       </div>
     )
@@ -133,6 +162,9 @@ const App = () => {
 
   return (
     <div>
+      {errorMessage === null ? <div></div> : <Notification message={errorMessage} classname={'error'}/>}
+      {successfullMessage === null ? <div></div> : <Notification message={successfullMessage} classname={'success'} />}
+
       <h2>blogs</h2>
       <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
       
