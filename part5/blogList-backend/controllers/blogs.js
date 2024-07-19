@@ -33,7 +33,6 @@ blogListRouter.post("/", middleware.userExtractor, async (request, response, nex
 
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
-    console.log('users.blogs: ', user.blogs)
     await user.save()
 
     response.status(201).json(savedBlog)

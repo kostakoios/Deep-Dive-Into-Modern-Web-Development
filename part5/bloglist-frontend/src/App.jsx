@@ -56,10 +56,7 @@ const App = () => {
 
   const updateBlogLikes = async (newObject) => {
     try {
-      console.log('newObject: ', newObject)
       const updatedObject = await blogService.update(newObject.id, newObject)
-      console.log('updatedObject: ', updatedObject)
-
       setBlogs(blogs.map(blog => updatedObject.id !== blog.id ? blog : updatedObject))
     } catch (err) {
       setErrorMessage(err, 'Wrong credentials')
