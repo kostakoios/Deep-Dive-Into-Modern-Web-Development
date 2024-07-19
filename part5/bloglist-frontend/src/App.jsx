@@ -54,6 +54,21 @@ const App = () => {
     }
   }
 
+  const updateBlogLikes = async (newObject) => {
+    try {
+      console.log('newObject: ', newObject)
+      const updatedObject = await blogService.update(newObject.id, newObject)
+      console.log('updatedObject: ', updatedObject)
+
+      setBlogs(blogs.map(blog => updatedObject.id !== blog.id ? blog : updatedObject))
+    } catch (err) {
+      setErrorMessage(err, 'Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
@@ -114,8 +129,8 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="new Blog">
-      <BlogForm createBlog={addBlog}/>
-    </Togglable> 
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   )
 
   if (user === null) {
@@ -137,9 +152,9 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
 
-       {blogForm()}
+      {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlogLikes={updateBlogLikes} />
       )}
     </div>
   )

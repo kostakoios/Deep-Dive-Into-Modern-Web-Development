@@ -72,17 +72,19 @@ blogListRouter.delete('/:id', middleware.userExtractor, async (request, response
   }
 });
 
-blogListRouter.put('/:id', async (request, response, next) => {
+blogListRouter.put('/:id', middleware.userExtractor, async (request, response, next) => {
   try {
     const body = request.body
+    const user = request.user
 
     const blog = {
       title: body.title,
       author: body.author,
       url: body.url,
+      user: user.id,
       likes: body.likes
     }
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true})
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true}).populate('user', {username: 1, name: 1, id: 1})
     response.json(updatedBlog)
   } catch(error) {
     next(error)
