@@ -66,6 +66,18 @@ const App = () => {
     }
   }
 
+  const removeBlogById = async (blogId) => {
+    try {
+      await blogService.deleteBlog(blogId)
+      setBlogs(blogs.map(blog => blog.id !== blogId))
+    } catch (err) {
+      setErrorMessage(err, 'Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
@@ -151,7 +163,7 @@ const App = () => {
 
       {blogForm()}
       {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlogLikes={updateBlogLikes} />
+        <Blog key={blog.id} blog={blog} updateBlogLikes={updateBlogLikes}  removeBlogById={removeBlogById}/>
       )}
     </div>
   )
