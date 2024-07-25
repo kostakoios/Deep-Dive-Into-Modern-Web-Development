@@ -44,3 +44,28 @@ test(`clicking the button shows the blog's URL and number of likes`, async () =>
     expect(urlElement).toBeDefined()
     expect(likesElement).toBeDefined()
   })
+
+  test('clicking the like button twice calls event handler twice', async () => {
+    const blog = {
+        title: 'My new Book!',
+        author: 'koutinio',
+        url: 'http://google.com',
+        likes: 10
+    }
+
+    const mockUpdateBlogLikes = vi.fn()
+
+    render(
+      <Blog blog={blog} updateBlogLikes={mockUpdateBlogLikes} />
+    )
+
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+    
+    expect(mockUpdateBlogLikes).toHaveBeenCalledTimes(2)
+})
