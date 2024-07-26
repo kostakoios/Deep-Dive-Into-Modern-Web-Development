@@ -68,7 +68,7 @@ const App = () => {
   const removeBlogById = async (blogId) => {
     try {
       await blogService.deleteBlog(blogId)
-      setBlogs(blogs.map(blog => blog.id !== blogId))
+      setBlogs(blogs.filter(blog => blog.id !== blogId))
     } catch (err) {
       setErrorMessage(err, 'Wrong credentials')
       setTimeout(() => {
@@ -161,7 +161,7 @@ const App = () => {
       <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
 
       {blogForm()}
-      {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+      {blogs.length > 0 && blogs.sort((a,b) => b.likes - a.likes).map(blog =>
         <Blog key={blog.id} blog={blog} updateBlogLikes={updateBlogLikes}  removeBlogById={removeBlogById}/>
       )}
     </div>
