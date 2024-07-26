@@ -38,7 +38,7 @@ const Blog = ({ blog, updateBlogLikes, removeBlogById }) => {
         <div className='visibleDetails'>
           <p>{blog.url}</p>
           <p>
-            {blog.likes}
+            <span id='bloglikes'>{blog.likes}</span>
             <button onClick={handleBlogLikes}>like</button>
           </p>
           <p>{blog.author}</p>

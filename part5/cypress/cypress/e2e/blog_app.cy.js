@@ -54,5 +54,19 @@ describe('Bloglist app', function() {
 
       cy.contains('My new super blog!')
     })
+
+    it('user can lika a blog', function() {
+      cy.contains('new Blog').click()
+      cy.get('input[name="title"]').type('My new super blog!')
+      cy.get('input[name="author"]').type('Jeronimo!')
+      cy.get('input[name="url"]').type('http:/.jeronimo.org')
+
+      cy.contains('create').click()
+
+      cy.contains('My new super blog!')
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.get('#bloglikes').contains('1')
+    })
   })
 })
