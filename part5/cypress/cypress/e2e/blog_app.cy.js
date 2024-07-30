@@ -1,14 +1,14 @@
 describe('Bloglist app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
     const user = {
       name: 'Matti Luukkainen',
       username: 'mluukkai',
       password: 'salainen'
     }
-    cy.request('POST', 'http://localhost:3003/api/users/', user) 
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user) 
 
-    cy.visit('http://localhost:5173/')
+    cy.visit('')
     cy.contains('log in').click()
   })
   
@@ -81,6 +81,34 @@ describe('Bloglist app', function() {
       cy.contains('view').click()
       cy.contains('remove').click()
       cy.contains('view').should('not.exist')
+    })
+  })
+
+  describe('only the creator can see the delete buton', function() {
+    beforeEach(function() {
+      const user = {
+        name: 'Jamson Momoa',
+        username: 'Jamson',
+        password: 'salainen'
+      }
+      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+
+      cy.login({ username: 'mluukkai', password: 'salainen' })
+      cy.createBlog({ title: 'first title', author: 'mluukkai', url: 'http://sadfsa.com' })
+      cy.createBlog({ title: 'second title', author: 'mluukkai', url: 'http://sadfsa.com'  })
+      cy.createBlog({ title: 'Third title', author: 'mluukkai', url: 'http://sadfsa.com'  })
+    })
+
+    it('owner user can see a delete blog', function() {
+      cy.contains('log in').click()
+      cy.get('#username').type('Jamson')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()  
+      cy.login({ username: 'Jamson', password: 'salainen' })
+      
+      cy.contains('first title').should('not.exist')
+      cy.contains('second title').should('not.exist')
+      cy.contains('Third title').should('not.exist')
     })
   })
 })
