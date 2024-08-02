@@ -4,13 +4,14 @@ const initialState = {
     value: ''
 }
 
-export const anecdotesSlice = createSlice({
+export const anecdotesFilterSlice = createSlice({
     name: 'filter',
     initialState,
     reducers: {
         filterAnecdotes(state, action) {
             console.log('action.payload: ', action.payload, current(state))
-            return {value: action.payload}
+            state = {value: action.payload} 
+            return state
         }
     }
 })
@@ -31,5 +32,5 @@ export const anecdotesSlice = createSlice({
 // }
 
 // export default filterReducer
-export const { filterAnecdotes } = anecdotesSlice.actions
-export default anecdotesSlice.reducer
+export const { filterAnecdotes } = anecdotesFilterSlice.actions
+export default anecdotesFilterSlice.reducer
