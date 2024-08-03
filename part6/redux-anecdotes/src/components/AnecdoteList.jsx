@@ -13,9 +13,10 @@ const AnecdoteList = () => {
     const anecdotes = useSelector(({anecdotes, filter}) => filter.value === '' ? anecdotes 
     : anecdotes.filter(anecdot => anecdot.content.includes(filter.value) && anecdot))
     
-    const vote = (id, content) => {
+    const vote = (id, content, votes) => {
         console.log('vote', id)
-        dispatch(increaseVote(id))
+        const changeObjVote = {content, votes: votes + 1}
+        dispatch(increaseVote(id, changeObjVote))
         dispatch(showNotification(`you voted '${content}'`))
     }
     console.log('anecdotssssss: ', anecdotes)
@@ -28,7 +29,7 @@ const AnecdoteList = () => {
                     </div>
                     <div>
                         has { anecdote.votes }
-                        <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+                        <button onClick={() => vote(anecdote.id, anecdote.content, anecdote.votes)}>vote</button>
                     </div>
                 </div>
             )}
