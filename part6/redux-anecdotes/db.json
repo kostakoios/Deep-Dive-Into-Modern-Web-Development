@@ -2,7 +2,7 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "votes": 2,
+      "votes": 4,
       "id": "47145"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "content": "Shengelidze maro",
-      "votes": 1,
+      "votes": 2,
       "id": "fbc7"
     },
     {
@@ -41,9 +41,9 @@
       "votes": 0
     },
     {
-      "id": "946d",
       "content": "Hello this time its me",
-      "votes": 0
+      "votes": 3,
+      "id": "946d"
     }
   ]
 }

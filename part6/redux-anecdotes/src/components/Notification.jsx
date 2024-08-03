@@ -1,22 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { clearNotification } from '../reducers/notificationReducer'
+import { useSelector } from 'react-redux'
+
 
 const Notification = () => {
   const notification = useSelector(state => state.notification.value)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (notification !== '' && notification) {
-      const timer = setTimeout(() => {
-        dispatch(clearNotification())      
-      }, 5000)
-
-      // Clear timeout if the component is unmounted before the timeout completes
-      return () => clearTimeout(timer)
-    }
-  }, [notification, dispatch])
-
+  
   if (!notification) {
     return null;
   }
