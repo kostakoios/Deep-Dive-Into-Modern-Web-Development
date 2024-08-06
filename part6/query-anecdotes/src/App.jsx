@@ -42,6 +42,14 @@ const App = () => {
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+    },
+    onError: (error) => {
+      console.log('errorrrrrr: ', error.response.data.error) 
+      const errorMessage = error.response.data.error
+      notificationDispatch({type: 'MESSAGE', payload: errorMessage})
+    setTimeout(() => {
+      notificationDispatch({ type: 'HIDE_MESSAGE' })
+    }, 5000)
     }
    })
 
@@ -58,6 +66,7 @@ const App = () => {
   }
 
   if ( result.isError ) {
+    console.log(JSON.parse(JSON.stringify(result)))
     return <div>anecdote service not available due to problems in server</div>
   }
   const anecdotes = result.data
