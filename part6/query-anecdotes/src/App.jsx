@@ -2,8 +2,22 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAnecdotes, createAnecdote, updateVote } from './requests'
+import { useReducer } from 'react'
+
+const notificationReducer = (state, action) => {
+  switch (action.type) {
+    case "MESSAGE":
+      console.log('I am herererere: ', action.payload)
+          return action.payload 
+    case "HIDE_MESSAGE":
+        return ''
+    default:
+        return state
+  }
+}
 
 const App = () => {
+  const [notification, notificationDispatch] = useReducer(notificationReducer, "")
   const queryClient = useQueryClient()
 
   const updateVoteMutation = useMutation({
@@ -17,6 +31,10 @@ const App = () => {
   const handleVote = (anecdote) => {
     console.log('vote')
     updateVoteMutation.mutate({...anecdote, votes: anecdote.votes + 1 })
+    notificationDispatch({type: 'MESSAGE', payload: 'The anecdote has been voted'})
+    setTimeout(() => {
+      notificationDispatch({ type: 'HIDE_MESSAGE' })
+    }, 5000)
   }
 
   const newAnecdoteMutation = useMutation({ 
@@ -48,8 +66,8 @@ const App = () => {
     <div>
       <h3>Anecdote app</h3>
     
-      <Notification />
-      <AnecdoteForm newAnecdoteMutation={newAnecdoteMutation} />
+      <Notification message={notification}/>
+      <AnecdoteForm newAnecdoteMutation={newAnecdoteMutation} dispatch={notificationDispatch} type='MESSAGE'/>
     
       {anecdotes && anecdotes.map(anecdote =>
         <div key={anecdote.id}>

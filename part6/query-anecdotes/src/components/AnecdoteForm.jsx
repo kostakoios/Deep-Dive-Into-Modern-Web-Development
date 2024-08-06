@@ -1,4 +1,4 @@
-const AnecdoteForm = ({newAnecdoteMutation}) => {
+const AnecdoteForm = ({newAnecdoteMutation, dispatch, type}) => {
 
   const onCreate = (event) => {
     event.preventDefault()
@@ -6,6 +6,10 @@ const AnecdoteForm = ({newAnecdoteMutation}) => {
     event.target.anecdote.value = ''
     console.log('new anecdote')
     newAnecdoteMutation.mutate({content, votes: 0})
+    dispatch({ type, payload: 'New Anecdote has been added!' })
+    setTimeout(() => {
+      dispatch({ type: 'HIDE_MESSAGE' })
+    }, 5000)
 }
 
   return (
