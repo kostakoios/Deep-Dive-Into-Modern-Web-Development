@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams, useMatch
+  Routes, Route, Link, useParams, useMatch, useNavigate
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -86,7 +86,6 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
-
 }
 
 const Anecdote = ({ anecdote }) => {
@@ -123,6 +122,7 @@ const App = () => {
       id: 2
     }
   ])
+  const navigate = useNavigate()
 
   const [notification, setNotification] = useState('')
   
@@ -130,8 +130,15 @@ const App = () => {
   const anecdote = match ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id)) : null
   
   const addNew = (anecdote) => {
+
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    navigate('/')
+    setNotification(`a new anecdote ${anecdote.content} created!`);
+     // Set a timer to clear the notification after 2 seconds
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   const anecdoteById = (id) =>
@@ -151,6 +158,7 @@ const App = () => {
   return (
     <div>
         <h1>Software anecdotes</h1>
+        {notification}
         <Menu />
         <Routes>
           <Route path="anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
