@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import {
-  BrowserRouter as Router,
   Routes, Route, Link, useParams, useMatch, useNavigate
 } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -23,7 +23,7 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map(anecdote => <li key={anecdote.id} >
         <Link to={`/anecdotes/${anecdote.id}`}> {anecdote.content} </Link>
-        </li>)}
+      </li>)}
     </ul>
   </div>
 )
@@ -51,17 +51,16 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
+  const content = useField("content")
+  const author = useField("author")
+  const info = useField("info")
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
   }
@@ -72,15 +71,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name={content.name} value={content.value} onChange={content.onChange} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input  name={author.name} value={author.value} onChange={author.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name={info.name} value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
       </form>
@@ -123,19 +122,20 @@ const App = () => {
     }
   ])
   const navigate = useNavigate()
-
+ 
   const [notification, setNotification] = useState('')
-  
+  const username = useField('text')
+
   const match = useMatch('/anecdotes/:id')
   const anecdote = match ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id)) : null
-  
+
   const addNew = (anecdote) => {
 
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
     navigate('/')
     setNotification(`a new anecdote ${anecdote.content} created!`);
-     // Set a timer to clear the notification after 2 seconds
+    // Set a timer to clear the notification after 2 seconds
     setTimeout(() => {
       setNotification('')
     }, 5000)
@@ -157,15 +157,15 @@ const App = () => {
 
   return (
     <div>
-        <h1>Software anecdotes</h1>
-        {notification}
-        <Menu />
-        <Routes>
-          <Route path="anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
-          <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}/>
-          <Route path="/about" element={<About />} />
-          <Route path="/create" element={<CreateNew addNew={addNew} />}/>
-        </Routes>
+      <h1>Software anecdotes</h1>
+      {notification}
+      <Menu />
+      <Routes>
+        <Route path="anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
+        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+      </Routes>
       <Footer />
     </div>
   )
