@@ -97,6 +97,7 @@ const CreateNew = (props) => {
 const Anecdote = ({ anecdote }) => {
   // const id = useParams().id
   // const anecdote = anecdotes.find(n => n.id === Number(id))
+  
   if (!anecdote) {
     return null
   }
