@@ -11,7 +11,6 @@ import { appendBlogList } from './reducers/bloglistReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  // const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -22,10 +21,7 @@ const App = () => {
 
   console.log('blogs: ', blogs)
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      console.log('blogs inside: ', blogs)
-      return dispatch(appendBlogList(blogs.sort((a, b) => b.likes - a.likes)))
-    });
+    blogService.getAll().then((blogs) => dispatch(appendBlogList(blogs.sort((a, b) => b.likes - a.likes))));
   }, [dispatch]);
 
   useEffect(() => {
