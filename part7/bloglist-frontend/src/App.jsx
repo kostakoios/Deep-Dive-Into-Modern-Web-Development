@@ -8,17 +8,20 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from 'react-redux'
 import { appendBlogList, createBlogList, deleteBlogitem,  updateBlogLikes as updateBlogLikesAction } from './reducers/bloglistReducer'
+import { appendUser, removeUser } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successfullMessage, setSuccessfullMessage] = useState(null);
   const [loginVisible, setLoginVisible] = useState(false);
   const blogs = useSelector(state => state.bloglist)
   const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
+
+  const user = useSelector(state => state.user)
 
   console.log('blogs: ', blogs)
   useEffect(() => {
@@ -31,7 +34,8 @@ const App = () => {
     // const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson);
-      setUser(user);
+      dispatch(appendUser(user))
+      // setUser(user);
       blogService.setToken(user.token);
     }
   }, []);
@@ -42,7 +46,8 @@ const App = () => {
       const getUser = await loginService.login({ username, password });
       console.log("getUser: ", getUser);
       window.localStorage.setItem("loggedBlogUser", JSON.stringify(getUser));
-      setUser(getUser);
+      dispatch(appendUser(getUser))
+      // setUser(getUser);
       blogService.setToken(getUser.token);
       setUsername("");
       setPassword("");
@@ -91,7 +96,8 @@ const App = () => {
     event.preventDefault();
     try {
       window.localStorage.removeItem("loggedBlogUser");
-      setUser(null);
+      dispatch(removeUser(null))
+      // setUser(null);
       setSuccessfullMessage("User Loged out successfully!");
       setTimeout(() => {
         setSuccessfullMessage(null);
