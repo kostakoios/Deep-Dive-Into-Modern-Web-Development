@@ -7,7 +7,7 @@ import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from 'react-redux'
-import { appendBlogList } from './reducers/bloglistReducer'
+import { appendBlogList, createBlogList, deleteBlogitem,  updateBlogLikes as updateBlogLikesAction } from './reducers/bloglistReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -18,14 +18,17 @@ const App = () => {
   const [successfullMessage, setSuccessfullMessage] = useState(null);
   const [loginVisible, setLoginVisible] = useState(false);
   const blogs = useSelector(state => state.bloglist)
+  const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
 
   console.log('blogs: ', blogs)
   useEffect(() => {
-    blogService.getAll().then((blogs) => dispatch(appendBlogList(blogs.sort((a, b) => b.likes - a.likes))));
-  }, [dispatch]);
+    if(loggedUserJson){
+      blogService.getAll().then((blogs) => dispatch(appendBlogList(blogs.sort((a, b) => b.likes - a.likes))));
+    }
+  }, [dispatch, loggedUserJson]);
 
   useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
+    // const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson);
       setUser(user);
@@ -58,11 +61,12 @@ const App = () => {
   const updateBlogLikes = async (newObject) => {
     try {
       const updatedObject = await blogService.update(newObject.id, newObject);
-      setBlogs(
-        blogs.map((blog) =>
-          updatedObject.id !== blog.id ? blog : updatedObject,
-        ),
-      );
+      dispatch(updateBlogLikesAction(updatedObject));  // Dispatch the updateBlogLikes action
+      // setBlogs(
+      //   blogs.map((blog) =>
+      //     updatedObject.id !== blog.id ? blog : updatedObject,
+      //   ),
+      // );
     } catch (err) {
       setErrorMessage(err, "Wrong credentials");
       setTimeout(() => {
@@ -74,7 +78,8 @@ const App = () => {
   const removeBlogById = async (blogId) => {
     try {
       await blogService.deleteBlog(blogId);
-      setBlogs(blogs.filter((blog) => blog.id !== blogId));
+      dispatch(deleteBlogitem(blogId))
+      // setBlogs(blogs.filter((blog) => blog.id !== blogId));
     } catch (err) {
       setErrorMessage(err, "Wrong credentials");
       setTimeout(() => {
@@ -104,7 +109,8 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const returnedBlog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(returnedBlog));
+      dispatch(createBlogList(returnedBlog))
+      // setBlogs(blogs.concat(returnedBlog));
       setSuccessfullMessage(
         `A new blog ${returnedBlog.title} by ${returnedBlog.author}`,
       );
@@ -119,7 +125,7 @@ const App = () => {
       }, 15000);
     }
   };
-  console.log("user: ", errorMessage);
+  // console.log("user: ", errorMessage);
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? "none" : "" };
     const showWhenVisible = { display: loginVisible ? "" : "none" };
