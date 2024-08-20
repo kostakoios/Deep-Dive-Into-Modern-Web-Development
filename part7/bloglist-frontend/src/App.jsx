@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import usersService from "./services/users";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
+import ShowUsersGeneralInfo from "./components/ShowUsersGeneralInfo"
 import { useDispatch, useSelector } from 'react-redux'
-import { appendBlogList, createBlogList, deleteBlogitem,  updateBlogLikes as updateBlogLikesAction } from './reducers/bloglistReducer'
+import { appendBlogList, createBlogList, deleteBlogitem, updateBlogLikes as updateBlogLikesAction } from './reducers/bloglistReducer'
 import { appendUser, removeUser } from './reducers/userReducer'
 
 const App = () => {
@@ -15,6 +17,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   // const [user, setUser] = useState(null);
+  const [allUsersData, setAllUsersData] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null);
   const [successfullMessage, setSuccessfullMessage] = useState(null);
   const [loginVisible, setLoginVisible] = useState(false);
@@ -24,14 +27,16 @@ const App = () => {
   const user = useSelector(state => state.user)
 
   console.log('blogs: ', blogs)
+  console.log('allUsersData: ', allUsersData)
   useEffect(() => {
-    if(loggedUserJson){
+    if (loggedUserJson) {
       blogService.getAll().then((blogs) => dispatch(appendBlogList(blogs.sort((a, b) => b.likes - a.likes))));
     }
   }, [dispatch, loggedUserJson]);
 
   useEffect(() => {
     // const loggedUserJson = window.localStorage.getItem("loggedBlogUser");
+    usersService.getAllusers().then(usersData => setAllUsersData(usersData))
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson);
       dispatch(appendUser(user))
@@ -153,11 +158,18 @@ const App = () => {
     );
   };
 
+
+  const showGeneralInfo = () => (
+    <ShowUsersGeneralInfo allUsersData={allUsersData} />
+  )
+
   const blogForm = () => (
     <Togglable buttonLabel="new Blog">
       <BlogForm createBlog={addBlog} />
     </Togglable>
   );
+
+
 
   if (user === null) {
     return (
@@ -195,7 +207,7 @@ const App = () => {
       <p>
         {user.name} logged in <button onClick={handleLogout}>Logout</button>
       </p>
-
+      {showGeneralInfo()}
       {blogForm()}
       <div className="blog">
         {blogs.length > 0 &&
