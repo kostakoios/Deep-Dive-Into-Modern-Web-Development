@@ -79,7 +79,6 @@ const App = () => {
     try {
       await blogService.deleteBlog(blogId);
       dispatch(deleteBlogitem(blogId))
-      // setBlogs(blogs.filter((blog) => blog.id !== blogId));
     } catch (err) {
       setErrorMessage(err, "Wrong credentials");
       setTimeout(() => {
@@ -110,7 +109,6 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject);
       dispatch(createBlogList(returnedBlog))
-      // setBlogs(blogs.concat(returnedBlog));
       setSuccessfullMessage(
         `A new blog ${returnedBlog.title} by ${returnedBlog.author}`,
       );
