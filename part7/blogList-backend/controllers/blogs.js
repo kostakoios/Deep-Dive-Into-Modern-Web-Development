@@ -90,4 +90,13 @@ blogListRouter.put('/:id', middleware.userExtractor, async (request, response, n
   }
 });
 
+blogListRouter.get('/:id',  async (request, response, next) => {
+  try {
+      const blog = await Blog.findById(request.params.id).populate('user', {username: 1, name: 1, id: 1})
+      response.json(blog)
+  } catch(error) {
+    next(error)
+  }
+});
+
 module.exports = blogListRouter;

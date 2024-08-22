@@ -235,6 +235,7 @@ import Home from "./components/Home";
 import Users from "./components/Users";
 import Login from "./components/Login";
 import User from "./components/User";
+import BlogDetails from "./components/BlogDetails";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -266,6 +267,8 @@ const App = () => {
       <Route path="/users" element={user && user.name ? <Users /> : <Navigate to="/login" />} />
       <Route path="/login" element={user && user.name ? <Navigate to="/users" /> : <Login />} />
       <Route path="/users/:id" element={<User />} />
+      <Route path="/blogs/:id" element={<BlogDetails />} />
+
       </Routes>
     </div>
   );

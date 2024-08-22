@@ -26,6 +26,8 @@ const create = async (newObject) => {
 };
 
 const update = async (id, newObject) => {
+  console.log('token inside update service: ', token)
+  
   const config = {
     headers: { Authorization: token },
   };
@@ -40,4 +42,14 @@ const deleteBlog = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config);
 };
 
-export default { getAll, create, setToken, update, deleteBlog, token };
+const getBlogData = async (id) => {
+  const config = {
+     headers: { Authorization: token },
+   };
+   console.log('token must config: ', token)
+   const response = await axios.get(`${baseUrl}/${id}`, config)
+   console.log('respjonsnlsnkdsfsdf as: ', response.data)
+   return response.data;
+}
+
+export default { getAll, create, setToken, update, deleteBlog, getBlogData };

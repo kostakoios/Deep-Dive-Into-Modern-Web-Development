@@ -35,7 +35,9 @@ const blogListSlice = createSlice({
            return action.payload
         },
         updateBlogLikes(state, action) {
+            console.log('update blog likes')
             const updatedBlog = action.payload
+            console.log('update blog into the updateBlogLikes: ', updatedBlog)
             return state.map(blog => 
                 blog.id !== updatedBlog.id ? blog : updatedBlog
             )
