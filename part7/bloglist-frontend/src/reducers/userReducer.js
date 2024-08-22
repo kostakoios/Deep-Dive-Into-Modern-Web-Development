@@ -2,7 +2,7 @@ import { createSlice, current } from '@reduxjs/toolkit'
 
 const blogListSlice = createSlice({
     name: 'userInfo',
-    initialState: [],
+    initialState: {},
     reducers: {
         appendUser(state, action) {
             console.log('blogsss inside appendBloglist: ', action.payload)  

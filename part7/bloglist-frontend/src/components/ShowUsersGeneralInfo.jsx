@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const ShowUsersGeneralInfo = ({allUsersData}) => {
     return (
@@ -17,7 +18,11 @@ const ShowUsersGeneralInfo = ({allUsersData}) => {
                     {
                         allUsersData && allUsersData.map(user => {
                             return <tr key={user.id}>
-                                <td>{user.name}</td>
+                                <td>
+                                <Link to={`/users/${user.id}`} >
+                                {user.name}
+                                </Link>
+                                </td>
                                 <td>{user.blogs.length}</td>
                             </tr>
                         })
