@@ -71,6 +71,29 @@ blogListRouter.delete('/:id', middleware.userExtractor, async (request, response
   }
 });
 
+blogListRouter.put('/:id/comments',  async (request, response, next) => {
+  try {
+    const comment = request.body.comment;
+    
+    if (!comment) {
+      return response.status(400).json({ error: "Comment content missing" });
+    }
+
+    const blog = await Blog.findById(request.params.id);
+
+    if (!blog) {
+      return response.status(404).json({ error: "Blog not found" });
+    }
+
+    blog.comments = blog.comments.concat(comment);
+    const updatedBlog = await blog.save();
+
+    response.status(200).json(updatedBlog);
+  } catch(error) {
+    next(error)
+  }
+});
+
 blogListRouter.put('/:id', middleware.userExtractor, async (request, response, next) => {
   try {
     const body = request.body
@@ -83,6 +106,7 @@ blogListRouter.put('/:id', middleware.userExtractor, async (request, response, n
       user: user.id,
       likes: body.likes
     }
+
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true}).populate('user', {username: 1, name: 1, id: 1})
     response.json(updatedBlog)
   } catch(error) {

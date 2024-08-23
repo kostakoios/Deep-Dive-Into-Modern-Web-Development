@@ -40,6 +40,12 @@ const BlogDetails = () => {
       <a href={blogInfo.url} target='_blank'>{blogInfo.url}</a>  
       <p>{blogInfo.likes} likes</p>
       <button onClick={handleBlogLikes}>like</button>
+      <p>Added by {blogInfo.author}</p>
+      <h3>Comments</h3>
+      <ul>
+      {blogInfo.comments && blogInfo.comments.map((comment, index) => <li key={index}>{comment}</li> )}
+      </ul>
+      
     </div>
   )
 }
