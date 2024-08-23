@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import blogService from '../services/blogs'
 import { useDispatch } from 'react-redux'
 import { appendUser } from "../reducers/userReducer";
 import { updateBlogComment, updateBlogLikes as updateBlogLikesAction } from '../reducers/bloglistReducer';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 const BlogDetails = () => {
   const dispatch = useDispatch()
@@ -14,12 +16,12 @@ const BlogDetails = () => {
 
   useEffect(() => {
     console.log('now I am inside of user.jsx: ', blogService.token)
-    if (loggedUserJson) { 
-        const user = JSON.parse(loggedUserJson);
-        dispatch(appendUser(user))
-        blogService.setToken(user.token);
-        blogService.getBlogData(blogId).then(blogData => setBlogInfo(blogData))
-     }
+    if (loggedUserJson) {
+      const user = JSON.parse(loggedUserJson);
+      dispatch(appendUser(user))
+      blogService.setToken(user.token);
+      blogService.getBlogData(blogId).then(blogData => setBlogInfo(blogData))
+    }
   }, [dispatch, blogId, loggedUserJson])
 
   if (!blogInfo) {
@@ -36,42 +38,47 @@ const BlogDetails = () => {
 
   const addComment = async (event) => {
     event.preventDefault()
-    if(newComment !== '') {
-      const returnedBlog = await blogService.createComment(blogId, {comment: newComment});
-        // Update the local state with the new comment
-    setBlogInfo((prevBlogInfo) => ({
-      ...prevBlogInfo,
-      comments: prevBlogInfo.comments.concat(newComment)
-    }));
+    if (newComment !== '') {
+      const returnedBlog = await blogService.createComment(blogId, { comment: newComment });
+      // Update the local state with the new comment
+      setBlogInfo((prevBlogInfo) => ({
+        ...prevBlogInfo,
+        comments: prevBlogInfo.comments.concat(newComment)
+      }));
       dispatch(updateBlogComment(returnedBlog));
       setNewComment('')
     } else {
       alert('Enter new comment than click on add comment!')
     }
-    
+
   }
 
   return (
     <div>
       <h1>{blogInfo.title}</h1>
-      <a href={blogInfo.url} target='_blank'>{blogInfo.url}</a>  
+      <a href={blogInfo.url} target='_blank'>{blogInfo.url}</a>
       <p>{blogInfo.likes} likes</p>
-      <button onClick={handleBlogLikes}>like</button>
+      <Button variant="contained" onClick={handleBlogLikes}>like</Button>
       <p>Added by {blogInfo.author}</p>
       <h3>Comments</h3>
       <form onSubmit={addComment}>
-        <input type="text"
-          value={newComment}
-          name="comment"
+
+        <TextField
+          hiddenLabel
+          id="filled-hidden-label-small"
+          defaultValue={newComment}
+          variant="filled"
+          size="small"
           placeholder="add comment"
           onChange={({ target }) => setNewComment(target.value)}
-         />
-        <button>add Comment</button>
+        />
+
+        <Button variant="contained">add Comment</Button>
       </form>
       <ul>
-      {blogInfo.comments && blogInfo.comments.map((comment, index) => <li key={index}>{comment}</li> )}
+        {blogInfo.comments && blogInfo.comments.map((comment, index) => <li key={index}>{comment}</li>)}
       </ul>
-      
+
     </div>
   )
 }
