@@ -236,6 +236,8 @@ import Users from "./components/Users";
 import Login from "./components/Login";
 import User from "./components/User";
 import BlogDetails from "./components/BlogDetails";
+import LogedInUser from "./components/LogedInUser";
+import ResponsiveAppBar from "./components/ResponsiveAppBar";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -259,9 +261,8 @@ const App = () => {
     console.log("userrrrr: ", user)
   return (
     <div>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/users">Users</Link>
-      </nav>
+      <ResponsiveAppBar />
+      <h1>Blogs</h1>
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/users" element={user && user.name ? <Users /> : <Navigate to="/login" />} />

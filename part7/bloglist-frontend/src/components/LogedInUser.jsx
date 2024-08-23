@@ -31,11 +31,10 @@ const LogedInUser = () => {
     };
 
     return (
-        <div>
+        <div style={{"display": "flex", "alignItems": "center"}}>
             <Notification message={errorMessage} classname="error" />
             <Notification message={successfullMessage} classname="success" />
-            <h2>blogs</h2>
-            {user.name} logged in <br />
+            {user.name} logged in 
             <button onClick={handleLogout}>Loged out </button>
         </div>
     )

@@ -36,7 +36,6 @@ const BlogDetails = () => {
 
   return (
     <div>
-     <LogedInUser />
       <h1>{blogInfo.title}</h1>
       <a href={blogInfo.url} target='_blank'>{blogInfo.url}</a>  
       <p>{blogInfo.likes} likes</p>

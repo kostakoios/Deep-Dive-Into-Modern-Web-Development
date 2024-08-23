@@ -29,7 +29,6 @@ const Users = () => {
     console.log('token inside of users.jsx is: ', blogService.token)
     return (
     <div>
-        <LogedInUser />
         <ShowUsersGeneralInfo allUsersData={allUsersData} />
     </div>
 

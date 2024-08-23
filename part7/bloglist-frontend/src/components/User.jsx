@@ -25,7 +25,7 @@ const User = () => {
   console.log('userInfo: ', userInfo)
   return (
     <div>
-    <LogedInUser />
+      <LogedInUser />
 
       <h2>{userInfo && userInfo.username}</h2>
       <h3>added blogs</h3>
