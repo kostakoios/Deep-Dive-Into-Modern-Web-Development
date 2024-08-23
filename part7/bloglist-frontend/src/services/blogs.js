@@ -52,4 +52,14 @@ const getBlogData = async (id) => {
    return response.data;
 }
 
-export default { getAll, create, setToken, update, deleteBlog, getBlogData };
+const createComment = async (id, newObject) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  console.log('token must config: ', token)
+  const response = await axios.put(`${baseUrl}/${id}/comments`, newObject, config)
+  console.log('respjonsnlsnkdsfsdf as: ', response.data)
+  return response.data;
+}
+
+export default { getAll, create, setToken, update, deleteBlog, getBlogData, createComment };
