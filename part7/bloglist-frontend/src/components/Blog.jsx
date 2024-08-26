@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom'
+import Button from '@mui/material/Button';
 
 const Blog = ({ blog, updateBlogLikes, removeBlogById }) => {
   const [visible, setVisible] = useState(false);
@@ -38,9 +39,10 @@ const Blog = ({ blog, updateBlogLikes, removeBlogById }) => {
         </Link>
       </span>
       <span className="blogAuthor"> {blog.author}</span>
-      <button onClick={() => setVisible(!visible)}>
-        {visible ? "hide" : "view"}{" "}
-      </button>
+      <Button onClick={() => setVisible(!visible)} variant="contained">   
+      {visible ? "hide" : "view"}{" "}
+      </Button>
+
       {visible && (
         <div className="visibleDetails">
           <p>{blog.url}</p>

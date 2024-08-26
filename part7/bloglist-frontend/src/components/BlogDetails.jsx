@@ -6,6 +6,7 @@ import { appendUser } from "../reducers/userReducer";
 import { updateBlogComment, updateBlogLikes as updateBlogLikesAction } from '../reducers/bloglistReducer';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
 
 const BlogDetails = () => {
   const dispatch = useDispatch()
@@ -38,6 +39,7 @@ const BlogDetails = () => {
 
   const addComment = async (event) => {
     event.preventDefault()
+    console.log('add comment function')
     if (newComment !== '') {
       const returnedBlog = await blogService.createComment(blogId, { comment: newComment });
       // Update the local state with the new comment
@@ -73,7 +75,7 @@ const BlogDetails = () => {
           onChange={({ target }) => setNewComment(target.value)}
         />
 
-        <Button variant="contained">add Comment</Button>
+        <Button type="submit" variant="contained">add Comment</Button>
       </form>
       <ul>
         {blogInfo.comments && blogInfo.comments.map((comment, index) => <li key={index}>{comment}</li>)}

@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import { appendUser, removeUser } from '../reducers/userReducer'
+import { removeUser } from '../reducers/userReducer'
 import { useSelector, useDispatch } from "react-redux";
 import Notification from "./Notification";
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const LogedInUser = () => {
     const dispatch = useDispatch();
@@ -35,7 +36,8 @@ const LogedInUser = () => {
             <Notification message={errorMessage} classname="error" />
             <Notification message={successfullMessage} classname="success" />
             {user.name} logged in 
-            <button onClick={handleLogout}>Loged out </button>
+            <Button onClick={handleLogout} variant="contained">Loged out</Button>
+
         </div>
     )
 }
